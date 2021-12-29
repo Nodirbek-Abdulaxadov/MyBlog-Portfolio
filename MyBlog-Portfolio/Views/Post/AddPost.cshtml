@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Add Post Page";
+    Layout = "_Layout";
+}
+@model PostCreateViewModel
+
+<!-- HOME -->
+<section id="home" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+
+            <span class="home-info" style="font-size: 8rem; color: white;">Create your blog</span>
+
+        </div>
+    </div>
+</section>
+
+<div class="container mx-5">
+    <div style="margin: 50px;"></div>
+    <form enctype="multipart/form-data" asp-controller="post" asp-action="addpost" method="post">
+        <div class="form-group">
+            <label asp-for="Title">Post title</label>
+            <input asp-for="Title" type="text" class="form-control" aria-describedby="emailHelp"
+                   placeholder="Enter post title">
+            <span class="text-danger" asp-validation-for="Title"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Body">Post body</label>
+            <textarea asp-for="Body" class="form-control" id="body" rows="5"
+                      placeholder="Enter more information about your blog"></textarea>
+            <span class="text-danger" asp-validation-for="Body"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageFile">Select one image file</label>
+            <input  asp-for="ImageFile" type="file" class="form-control-file" id="photo">
+            <span class="text-danger" asp-validation-for="ImageFile"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Category">Select blog category </label>
+            <select asp-for="Category" asp-items="Html.GetEnumSelectList<PostCategory>()" class="form-control" id="exampleFormControlSelect1">
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Region">Select your region</label>
+            <select asp-for="Region" asp-items="Html.GetEnumSelectList<PostRegion>()" class="form-control" id="exampleFormControlSelect1">
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div style="margin: 50px;"></div>
+</div>

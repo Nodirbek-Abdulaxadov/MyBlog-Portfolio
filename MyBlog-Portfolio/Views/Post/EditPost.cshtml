@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Edit Post Page";
+    Layout = "_Layout";
+}
+
+<!-- HOME -->
+<section id="home" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+
+            <span class="home-info" style="font-size: 8rem; color: white;">Create your blog</span>
+
+        </div>
+    </div>
+</section>
+
+<div class="container mx-5">
+    <div style="margin: 50px;"></div>
+    <form>
+        <div class="form-group">
+            <label for="title">Post title</label>
+            <input type="text" class="form-control" id="title" aria-describedby="emailHelp"
+                   placeholder="Enter post title">
+            <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+        </div>
+        <div class="form-group">
+            <label for="body">Post body</label>
+            <textarea class="form-control" id="body" rows="5"
+                      placeholder="Enter more information about your blog"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="photo">Select one image file</label>
+            <input type="file" class="form-control-file" id="photo">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select blog category </label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option>Art</option>
+                <option>Technology</option>
+                <option>IT</option>
+                <option>Design</option>
+                <option>Building</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select your region</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option>Tashkent</option>
+                <option>Fergana</option>
+                <option>Andijan</option>
+                <option>Samarkand</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div style="margin: 50px;"></div>
+</div>
