@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyBlog_Portfolio.Data.Models;
 using MyBlog_Portfolio.Data.Services;
 using System;

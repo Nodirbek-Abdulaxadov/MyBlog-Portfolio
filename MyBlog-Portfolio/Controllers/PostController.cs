@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MyBlog_Portfolio.Data.Models;
 using MyBlog_Portfolio.Data.Services;
@@ -21,16 +22,19 @@ namespace MyBlog_Portfolio.Controllers
             _postService = postService;
             _environment = environment;
         }
-        public IActionResult Index()
+        [Authorize]
+        public IActionResult Index(Guid id)
         {
-            return View();
+            List<Post> posts = _postService.GetAllPosts().Where(post => post.UserId == id).ToList();
+            return View(posts);
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult AddPost()
         {
             return View();
         }
+        [Authorize]
         [HttpPost]
         public IActionResult AddPost(PostCreateViewModel createViewModel)
         {
@@ -57,7 +61,8 @@ namespace MyBlog_Portfolio.Controllers
                     CreatedTime = DateTime.Now,
                     ImageFileName = uniqueName,
                     Category = createViewModel.Category,
-                    Region = createViewModel.Region
+                    Region = createViewModel.Region,
+                    UserId = createViewModel.UserId
                 };
 
                 post = _postService.AddPost(post);
@@ -69,15 +74,64 @@ namespace MyBlog_Portfolio.Controllers
                 return View();
             }
         }
-
-        public IActionResult EditPost()
-        {
-            return View();
-        }
         
-        public IActionResult PostDetails(Post post)
+        [Authorize]
+        [HttpGet]
+        public IActionResult EditPost(Guid id)
         {
-            return View(post);
+            Post post = _postService.GetPostById(id);
+
+            PostEditViewModel viewModel = new PostEditViewModel()
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Body = post.Body,
+                ImageFileName = post.ImageFileName,
+                Category = post.Category,
+                Region = post.Region,
+                UserId = post.UserId
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditPost(PostEditViewModel viewModel)
+        {
+            string img = viewModel.ImageFileName;
+            //if (viewModel.newImageFile != "")
+            //{
+            // Eski rasm o'chirilishi va yangi rasm saqlanishi kerak
+            //}
+
+            Post post = new Post()
+            {
+                Id = viewModel.Id,
+                Title = viewModel.Title,
+                Body = viewModel.Body,
+                Category = viewModel.Category,
+                Region = viewModel.Region,
+                ImageFileName = img,
+                UserId = viewModel.UserId
+            };
+
+            post = _postService.UpdatePost(post);
+
+            return RedirectToAction("PostDetails", post);
+        }
+
+        public IActionResult PostDetails(Guid id)
+        {
+            Post post = _postService.GetPostById(id);
+            return View("PostDetails", post);
+        }
+
+        public IActionResult DeletePost(Guid id)
+        {
+            _postService.DeletePost(id);
+
+            return RedirectToAction("Index");
         }
     }
 }

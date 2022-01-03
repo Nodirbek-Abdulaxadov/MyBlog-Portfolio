@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace MyBlog_Portfolio.ViewModels
 {
-    public class PostCreateViewModel
+    public class PostEditViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public string Body { get; set; }
-        [Required]
-        public IFormFile ImageFile { get; set; }
+        public string ImageFileName { get; set; }
+        public IFormFile newImageFile { get; set; }
         [Required]
         public PostCategory Category { get; set; }
         [Required]
         public PostRegion Region { get; set; }
-
-        [Required]
         public Guid UserId { get; set; }
     }
 }

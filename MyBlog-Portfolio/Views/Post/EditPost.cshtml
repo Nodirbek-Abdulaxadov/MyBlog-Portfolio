@@ -3,7 +3,10 @@
     Layout = "_Layout";
 }
 
+
+@model PostEditViewModel
 <!-- HOME -->
+
 <section id="home" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
@@ -15,45 +18,55 @@
     </div>
 </section>
 
+
 <div class="container mx-5">
     <div style="margin: 50px;"></div>
-    <form>
+    <form enctype="multipart/form-data" asp-controller="post" asp-action="editpost" method="post">
+
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
         <div class="form-group">
-            <label for="title">Post title</label>
-            <input type="text" class="form-control" id="title" aria-describedby="emailHelp"
-                   placeholder="Enter post title">
-            <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+            <label asp-for="Title">Post title</label>
+            <input asp-for="Title" type="text" class="form-control" aria-describedby="emailHelp"
+                   value="@Model.Title">
+            <span class="text-danger" asp-validation-for="Title"></span>
         </div>
         <div class="form-group">
-            <label for="body">Post body</label>
-            <textarea class="form-control" id="body" rows="5"
-                      placeholder="Enter more information about your blog"></textarea>
+            <label asp-for="Body">Post body</label>
+            <textarea asp-for="Body" class="form-control" id="body" rows="5">@Model.Body</textarea>
+            <span class="text-danger" asp-validation-for="Body"></span>
+        </div>
+        @{
+            string imageSource = "";
+            if (Model.ImageFileName == "" || Model.ImageFileName is null)
+            {
+                imageSource = "~/images/blog-image1.jpg";
+            }
+            else
+            {
+                imageSource = "~/images/" + Model.ImageFileName;
+            }
+        }
+        <div class="form-group">
+            <label asp-for="ImageFileName"></label>
+            <input asp-for="ImageFileName" type="hidden" value="@Model.ImageFileName" />
+            <img src="@imageSource" asp-append-version="true" style="height: 300px; width: 300px; object-fit: cover;" />
         </div>
         <div class="form-group">
-            <label for="photo">Select one image file</label>
-            <input type="file" class="form-control-file" id="photo">
+            <label asp-for="newImageFile">Select one image file</label>
+            <input asp-for="newImageFile" type="file" class="form-control-file" id="photo">
+            <span class="text-danger" asp-validation-for="newImageFile"></span>
         </div>
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Select blog category </label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>Art</option>
-                <option>Technology</option>
-                <option>IT</option>
-                <option>Design</option>
-                <option>Building</option>
-                <option>Other</option>
+            <label asp-for="Category">Select blog category </label>
+            <select asp-for="Category" asp-items="Html.GetEnumSelectList<PostCategory>()" class="form-control" id="exampleFormControlSelect1">
             </select>
         </div>
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Select your region</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>Tashkent</option>
-                <option>Fergana</option>
-                <option>Andijan</option>
-                <option>Samarkand</option>
-                <option>Other</option>
+            <label asp-for="Region">Select your region</label>
+            <select asp-for="Region" asp-items="Html.GetEnumSelectList<PostRegion>()" class="form-control" id="exampleFormControlSelect1">
             </select>
         </div>
+        <input asp-for="UserId" type="hidden" value="@Model.UserId" />
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <div style="margin: 50px;"></div>

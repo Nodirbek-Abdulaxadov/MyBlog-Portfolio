@@ -25,7 +25,7 @@ namespace MyBlog_Portfolio.Data.Models
         public PostCategory Category { get; set; }
         [Required]
         public PostRegion Region { get; set; }
-        
+        [Required]        
         public Guid UserId { get; set; }
     }
 }
