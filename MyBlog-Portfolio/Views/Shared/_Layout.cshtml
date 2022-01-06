@@ -1,7 +1,4 @@
-﻿@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,7 +26,7 @@
             <div class="na collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-nav-first">
                     <li><a asp-controller="home" asp-action="index" class="smoothScroll">Home</a></li>
-                    <li><a asp-controller="post" asp-action="index" asp-route-id="@UserManager.GetUserId(User)" class="smoothScroll">Blog</a></li>
+                    <li><a asp-controller="post" asp-action="index" class="smoothScroll">Blog</a></li>
                     <li><a asp-controller="home" asp-action="about" class="smoothScroll">About</a></li>
                     <li><a asp-controller="home" asp-action="contact" class="smoothScroll">Contact</a></li>
                 </ul>

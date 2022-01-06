@@ -22,6 +22,5 @@ namespace MyBlog_Portfolio.ViewModels
         public PostCategory Category { get; set; }
         [Required]
         public PostRegion Region { get; set; }
-        public Guid UserId { get; set; }
     }
 }

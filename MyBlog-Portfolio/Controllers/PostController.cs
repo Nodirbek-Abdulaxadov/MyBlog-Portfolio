@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyBlog_Portfolio.Areas.Identity.Data;
 using MyBlog_Portfolio.Data.Models;
 using MyBlog_Portfolio.Data.Services;
 using MyBlog_Portfolio.ViewModels;
@@ -16,15 +18,23 @@ namespace MyBlog_Portfolio.Controllers
     {
         private readonly IPostService _postService;
         private readonly IWebHostEnvironment _environment;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PostController(IPostService postService, IWebHostEnvironment environment)
+        public PostController(IPostService postService, 
+            IWebHostEnvironment environment,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _postService = postService;
             _environment = environment;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         [Authorize]
-        public IActionResult Index(Guid id)
+        public IActionResult Index()
         {
+            Guid id = Guid.Parse(_userManager.GetUserId(HttpContext.User));
             List<Post> posts = _postService.GetAllPosts().Where(post => post.UserId == id).ToList();
             return View(posts);
         }
@@ -52,7 +62,6 @@ namespace MyBlog_Portfolio.Controllers
                     fileStream.Close();
                 }
 
-
                 Post post = new Post()
                 {
                     Id = Guid.NewGuid(),
@@ -62,7 +71,7 @@ namespace MyBlog_Portfolio.Controllers
                     ImageFileName = uniqueName,
                     Category = createViewModel.Category,
                     Region = createViewModel.Region,
-                    UserId = createViewModel.UserId
+                    UserId = Guid.Parse(_userManager.GetUserId(HttpContext.User))
                 };
 
                 post = _postService.AddPost(post);
