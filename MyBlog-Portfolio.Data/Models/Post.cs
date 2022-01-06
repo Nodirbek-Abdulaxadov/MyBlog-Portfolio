@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace MyBlog_Portfolio.Data.Models
 {
-    [Table("Posts")]
     public class Post
     {
         [Required]

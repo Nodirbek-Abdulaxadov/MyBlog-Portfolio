@@ -17,8 +17,8 @@ namespace MyBlog_Portfolio.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<MyBlog_PortfolioContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("MyBlog_PortfolioContextConnection")));
+                    options.UseNpgsql(
+                        context.Configuration.GetConnectionString("PostgreDB")));
 
                 services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<MyBlog_PortfolioContext>();

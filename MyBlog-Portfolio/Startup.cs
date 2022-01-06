@@ -30,8 +30,10 @@ namespace MyBlog_Portfolio
 
             services.AddScoped<IPostService, PostService>();
 
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("LocalPostDB")));
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalPostDB")));
+                options.UseNpgsql(Configuration.GetConnectionString("PostgreDB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
