@@ -97,8 +97,7 @@ namespace MyBlog_Portfolio.Controllers
                 Body = post.Body,
                 ImageFileName = post.ImageFileName,
                 Category = post.Category,
-                Region = post.Region,
-                UserId = post.UserId
+                Region = post.Region
             };
 
             return View(viewModel);
@@ -122,7 +121,7 @@ namespace MyBlog_Portfolio.Controllers
                 Category = viewModel.Category,
                 Region = viewModel.Region,
                 ImageFileName = img,
-                UserId = viewModel.UserId
+                UserId = Guid.Parse(_userManager.GetUserId(HttpContext.User))
             };
 
             post = _postService.UpdatePost(post);
