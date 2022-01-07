@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyBlog_Portfolio.Areas.Identity.Data;
 using MyBlog_Portfolio.Data.Models;
 using MyBlog_Portfolio.Data.Services;
+using MyBlog_Portfolio.MVC_Services;
 using MyBlog_Portfolio.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,16 @@ namespace MyBlog_Portfolio.Controllers
     public class PostController : Controller
     {
         private readonly IPostService _postService;
-        private readonly IWebHostEnvironment _environment;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IMVCService _mVCService;
 
         public PostController(IPostService postService, 
-            IWebHostEnvironment environment,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            IMVCService mVCService,
+            UserManager<ApplicationUser> userManager)
         {
             _postService = postService;
-            _environment = environment;
             _userManager = userManager;
-            _signInManager = signInManager;
+            _mVCService = mVCService;
         }
         [Authorize]
         public IActionResult Index()
@@ -49,26 +47,14 @@ namespace MyBlog_Portfolio.Controllers
         public IActionResult AddPost(PostCreateViewModel createViewModel)
         {
             if (ModelState.IsValid)
-            {
-                string uniqueName = string.Empty;
-                if (createViewModel.ImageFile.FileName != null)
-                {
-                    string uplodFolder = Path.Combine(_environment.WebRootPath, "Images");
-                    uniqueName = Guid.NewGuid().ToString() + "_" + createViewModel.ImageFile.FileName;
-
-                    string filePath = Path.Combine(uplodFolder, uniqueName);
-                    FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    createViewModel.ImageFile.CopyTo(fileStream);
-                    fileStream.Close();
-                }
-
+            {              
                 Post post = new Post()
                 {
                     Id = Guid.NewGuid(),
                     Title = createViewModel.Title,
                     Body = createViewModel.Body,
                     CreatedTime = DateTime.Now,
-                    ImageFileName = uniqueName,
+                    ImageFileName = _mVCService.SaveImage(createViewModel.ImageFile),
                     Category = createViewModel.Category,
                     Region = createViewModel.Region,
                     UserId = Guid.Parse(_userManager.GetUserId(HttpContext.User))
@@ -108,10 +94,10 @@ namespace MyBlog_Portfolio.Controllers
         public IActionResult EditPost(PostEditViewModel viewModel)
         {
             string img = viewModel.ImageFileName;
-            //if (viewModel.newImageFile != "")
-            //{
-            // Eski rasm o'chirilishi va yangi rasm saqlanishi kerak
-            //}
+            if (viewModel.newImageFile is not null)
+            {
+                img = _mVCService.SaveImage(viewModel.newImageFile);
+            }
 
             Post post = new Post()
             {
@@ -121,6 +107,7 @@ namespace MyBlog_Portfolio.Controllers
                 Category = viewModel.Category,
                 Region = viewModel.Region,
                 ImageFileName = img,
+                CreatedTime = DateTime.Now,
                 UserId = Guid.Parse(_userManager.GetUserId(HttpContext.User))
             };
 
@@ -137,7 +124,12 @@ namespace MyBlog_Portfolio.Controllers
 
         public IActionResult DeletePost(Guid id)
         {
-            _postService.DeletePost(id);
+
+            Post post = _postService.GetPostById(id);
+            if (_mVCService.DeleteImage(post.ImageFileName) == true)
+            { 
+                _postService.DeletePost(id);
+            }
 
             return RedirectToAction("Index");
         }

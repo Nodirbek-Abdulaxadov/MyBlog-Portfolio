@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MyBlog_Portfolio.Areas.Identity.Data;
 using MyBlog_Portfolio.Data.Data_EF;
 using MyBlog_Portfolio.Data.Services;
+using MyBlog_Portfolio.MVC_Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace MyBlog_Portfolio
             services.AddControllersWithViews();
 
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IMVCService, MVCService>();
 
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("LocalPostDB")));

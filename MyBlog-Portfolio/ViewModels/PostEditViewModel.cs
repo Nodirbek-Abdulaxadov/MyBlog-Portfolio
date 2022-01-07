@@ -17,7 +17,7 @@ namespace MyBlog_Portfolio.ViewModels
         [Required]
         public string Body { get; set; }
         public string ImageFileName { get; set; }
-        public IFormFile newImageFile { get; set; }
+        public IFormFile? newImageFile { get; set; }
         [Required]
         public PostCategory Category { get; set; }
         [Required]
